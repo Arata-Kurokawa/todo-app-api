@@ -8,6 +8,7 @@ GET     /                             controllers.HomeController.index
 
 # TODO
 GET     /todo                         controllers.TodoController.index
+POST    /todo                         controllers.TodoController.create
 
 # TODO CATEGORY
 GET     /todoCategory                 controllers.TodoCategoryController.index

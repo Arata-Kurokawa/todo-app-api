@@ -20,7 +20,7 @@ object JsValueTodoCategory {
       todoCategory.id,
       todoCategory.v.name,
       todoCategory.v.slug,
-      todoCategory.v.color.code,
+      todoCategory.v.color.code
     )
   }
 }
