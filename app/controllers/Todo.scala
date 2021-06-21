@@ -7,6 +7,8 @@ import play.api.libs.json.Json
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import lib.model.Todo
+
 import model.JsValueTodo
 import useCases.TodoUseCase
 import forms.TodoForm
@@ -39,5 +41,13 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         }
       }
     )
+  }
+
+  def remove(id: Long) = Action.async { implicit req =>
+    for {
+      todo <- TodoUseCase.remove(Todo.Id(id))
+    } yield {
+      Ok(Json.toJson(Map("message" -> "removed todo")))
+    }
   }
 }
