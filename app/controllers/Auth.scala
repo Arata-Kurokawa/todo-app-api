@@ -8,6 +8,11 @@ import play.filters.csrf._
 import forms.SignInForm
 
 class AuthController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+  def verify() = Action { implicit req =>
+    val isValid = req.session.get("_uid").map(_ => true).getOrElse(false)
+    Ok(Json.toJson(isValid))
+  }
+
   def signIn() = Action { implicit req =>
     val form = SignInForm()
     val user = Map("id" -> 1, "email" -> "admin@todo.com", "password" -> "admintodo")

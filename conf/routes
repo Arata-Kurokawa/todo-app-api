@@ -7,7 +7,9 @@
 GET     /                             controllers.HomeController.index
 
 # AUTH
+GET      /auth/verify                 controllers.AuthController.verify
 POST     /auth/signIn                 controllers.AuthController.signIn
+POST     /auth/signOut                controllers.AuthController.signOut
 
 # TODO
 GET     /todo                         controllers.TodoController.index
