@@ -6,6 +6,9 @@
 # An example controller showing a sample home page
 GET     /                             controllers.HomeController.index
 
+# AUTH
+POST     /auth/signIn                 controllers.AuthController.signIn
+
 # TODO
 GET     /todo                         controllers.TodoController.index
 POST    /todo                         controllers.TodoController.create
