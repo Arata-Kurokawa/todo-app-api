@@ -5,6 +5,43 @@
 version: '3'
 
 services:
+  # API
+  api:
+    # ビルド時の設定
+    build:
+      # プロジェクトのディレクトリでビルドする
+      context: .
+      # マルチステージビルドのターゲットを指定
+      target: dev_mode
+      # Dockerfileの場所を指定
+      dockerfile: docker/api/Dockerfile
+    # ログローテート設定
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # ファイルのマウント設定
+    volumes:
+      # ソケットファイルの共有
+      # - type: volume
+      #   source: socket
+      #   target: /app/tmp
+      # アプリのソースをホストOSと共有する
+      - type: bind
+        source: ./
+        target: /
+    # コンテナを永続化
+    tty: true
+    # コマンド
+    command: sbt run
+    # ポート
+    ports:
+      - target: 9000
+        published: 9000
+        protocol: tcp
+        mode: host
+
   # MySQL
   db:
     image: mysql:5.7
