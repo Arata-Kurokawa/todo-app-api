@@ -30,17 +30,22 @@ services:
       # アプリのソースをホストOSと共有する
       - type: bind
         source: ./
-        target: /
+        target: /app
+      - type: bind
+        source: ~/.ivy2
+        target: /root/.ivy2
     # コンテナを永続化
     tty: true
     # コマンド
-    command: sbt run
+    command: sbt
     # ポート
     ports:
-      - target: 9000
-        published: 9000
-        protocol: tcp
-        mode: host
+      # - target: 9000
+      #   published: 9000
+      #   protocol: tcp
+      #   mode: host
+      - 9000:9000
+      - 33306:33306
 
   # MySQL
   db:

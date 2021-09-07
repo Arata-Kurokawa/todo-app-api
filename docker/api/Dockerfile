@@ -1,9 +1,11 @@
 # FROM openjdk:18-buster as base
-FROM openjdk:8-jdk-buster as base
 # FROM openjdk:18-jdk-alpine3.14 as base
+FROM amazoncorretto:8 as base
 
 ENV SBT_VERSION 1.2.4
 ENV SCALA_VERSION 2.12.8
+
+WORKDIR /app
 
 # RUN apk update && \
 #     apk upgrade && \
@@ -13,15 +15,15 @@ ENV SCALA_VERSION 2.12.8
 # RUN apt-get install software-properties-common
 # RUN apt-get install python-software-properties
 # RUN add-apt-repository ppa:webupd8team/java
-RUN apt-get update
+# RUN apt-get update
 # RUN apt-get install wget
 # RUN apt-get install openjdk-8-jdk
 
-RUN \
-  curl -fsL "https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz" | tar xfz - -C /usr/share && \
-  chown -R root:root /usr/share/sbt && \
-  chmod -R 755 /usr/share/sbt && \
-  ln -s /usr/share/sbt/bin/sbt /usr/local/bin/sbt
+# RUN \
+#   curl -fsL "https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz" | tar xfz - -C /usr/share && \
+#   chown -R root:root /usr/share/sbt && \
+#   chmod -R 755 /usr/share/sbt && \
+#   ln -s /usr/share/sbt/bin/sbt /usr/local/bin/sbt
 
 # RUN \
 #   echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
@@ -34,12 +36,17 @@ RUN \
 #   wget https://downloads.lightbend.com/scala/2.12.8/scala-2.12.8.deb && \
 #   dpkg -i scala-2.12.8.deb
 
+# sbt
+RUN rm -f /etc/yum.repos.d/bintray-rpm.repo
+RUN curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo
+RUN mv sbt-rpm.repo /etc/yum.repos.d/
+RUN yum -y install sbt
+
 FROM base as dev_mode
 
 # RUN sbtl
 
-# ENTRYPOINT sbt compile && \
-#   $0 $@
+ENTRYPOINT $0 $@
 
 FROM base as prod
 
