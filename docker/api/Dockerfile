@@ -42,6 +42,8 @@ RUN curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo
 RUN mv sbt-rpm.repo /etc/yum.repos.d/
 RUN yum -y install sbt
 
+RUN yum -y install mysql 5.7
+
 FROM base as dev_mode
 
 # RUN sbtl

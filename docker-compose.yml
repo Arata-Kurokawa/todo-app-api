@@ -7,6 +7,7 @@ version: '3'
 services:
   # API
   api:
+    container_name: todo-app-api
     # ビルド時の設定
     build:
       # プロジェクトのディレクトリでビルドする
@@ -37,20 +38,18 @@ services:
     # コンテナを永続化
     tty: true
     # コマンド
-    command: sbt
+    # command: sbt
     # ポート
     ports:
-      # - target: 9000
-      #   published: 9000
-      #   protocol: tcp
-      #   mode: host
       - 9000:9000
-      - 33306:33306
+    # コンテナ間通信用
+    networks:
+      - todo-app
 
   # MySQL
   db:
     image: mysql:5.7
-    container_name: to_do_app_api_container
+    container_name: todo-app-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE:      to_do
@@ -62,5 +61,14 @@ services:
     - ./docker/db/data:/var/lib/mysql
     - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
     - ./docker/db/sql:/docker-entrypoint-initdb.d
-    ports:
-      - 33306:3306
+    # ports:
+    #   - 33306:3306
+    # expose:
+    #   - 3306
+    networks:
+      - todo-app
+
+# ネットワーク名の定義
+networks:
+  # コンテナ間通信用
+  todo-app:
