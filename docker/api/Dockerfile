@@ -19,11 +19,24 @@ WORKDIR /app
 # RUN apt-get install wget
 # RUN apt-get install openjdk-8-jdk
 
+RUN yum -y install tar
+RUN yum -y install gzip
+RUN yum -y install wget
+
 # RUN \
 #   curl -fsL "https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz" | tar xfz - -C /usr/share && \
 #   chown -R root:root /usr/share/sbt && \
 #   chmod -R 755 /usr/share/sbt && \
 #   ln -s /usr/share/sbt/bin/sbt /usr/local/bin/sbt
+
+RUN curl -fsL "https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz" | tar xfz - -C /usr/share
+RUN chown -R root:root /usr/share/sbt
+RUN chmod -R 755 /usr/share/sbt
+RUN ln -s /usr/share/sbt/bin/sbt /usr/local/bin/sbt
+
+RUN wget https://downloads.lightbend.com/scala/${SCALA_VERSION}/scala-${SCALA_VERSION}.tgz
+RUN tar xvzf scala-${SCALA_VERSION}.tgz
+RUN mv scala-${SCALA_VERSION} /usr/local/scala
 
 # RUN \
 #   echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
@@ -37,10 +50,10 @@ WORKDIR /app
 #   dpkg -i scala-2.12.8.deb
 
 # sbt
-RUN rm -f /etc/yum.repos.d/bintray-rpm.repo
-RUN curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo
-RUN mv sbt-rpm.repo /etc/yum.repos.d/
-RUN yum -y install sbt
+# RUN rm -f /etc/yum.repos.d/bintray-rpm.repo
+# RUN curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo
+# RUN mv sbt-rpm.repo /etc/yum.repos.d/
+# RUN yum -y install sbt
 
 RUN yum -y install mysql 5.7
 
