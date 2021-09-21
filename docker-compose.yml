@@ -41,7 +41,7 @@ services:
     # command: sbt
     # ポート
     ports:
-      - 9000:9000
+      - "9000:9000"
     # コンテナ間通信用
     networks:
       - todo-app
@@ -63,8 +63,6 @@ services:
     - ./docker/db/sql:/docker-entrypoint-initdb.d
     ports:
       - "33306:3306"
-    # expose:
-    #   - 3306
     networks:
       - todo-app
 
