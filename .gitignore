@@ -11,3 +11,7 @@ docker/db/data/
 
 # vs code
 .vscode/
+.bloop/
+project/.bloop/
+project/metals.sbt
+project/project/
