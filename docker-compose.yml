@@ -5,10 +5,51 @@
 version: '3'
 
 services:
+  # API
+  api:
+    container_name: todo-app-api
+    # ビルド時の設定
+    build:
+      # プロジェクトのディレクトリでビルドする
+      context: .
+      # マルチステージビルドのターゲットを指定
+      target: dev_mode
+      # Dockerfileの場所を指定
+      dockerfile: docker/api/Dockerfile
+    # ログローテート設定
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # ファイルのマウント設定
+    volumes:
+      # ソケットファイルの共有
+      # - type: volume
+      #   source: socket
+      #   target: /app/tmp
+      # アプリのソースをホストOSと共有する
+      - type: bind
+        source: ./
+        target: /app
+      - type: bind
+        source: ~/.ivy2
+        target: /root/.ivy2
+    # コンテナを永続化
+    tty: true
+    # コマンド
+    # command: sbt
+    # ポート
+    ports:
+      - "9000:9000"
+    # コンテナ間通信用
+    networks:
+      - todo-app
+
   # MySQL
   db:
     image: mysql:5.7
-    container_name: to_do_app_api_container
+    container_name: todo-app-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE:      to_do
@@ -21,4 +62,11 @@ services:
     - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
     - ./docker/db/sql:/docker-entrypoint-initdb.d
     ports:
-      - 33306:3306
+      - "33306:3306"
+    networks:
+      - todo-app
+
+# ネットワーク名の定義
+networks:
+  # コンテナ間通信用
+  todo-app:
